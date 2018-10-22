@@ -31,6 +31,9 @@
 #include "LuaSocketWrap.h"
 #include "LuaMemoryProfile.h"
 
+extern int luaopen_pb(slua::lua_State *L);
+extern int luaopen_rapidjson(slua::lua_State *L);
+
 namespace slua {
     int import(lua_State *L) {
         const char* name = LuaObject::checkValue<const char*>(L,1);
@@ -240,6 +243,9 @@ namespace slua {
         LuaClass::reg(L);
         LuaArray::reg(L);
         LuaMap::reg(L);
+
+        luaL_requiref(L, "pb", &luaopen_pb, 1);
+        luaL_requiref(L, "rapidjson", &luaopen_rapidjson, 1);
 
         lua_settop(L,0);
 

@@ -44,13 +44,11 @@ set(LUA_SRC_FILES
     ${LUA_SRC_PATH}/lzio.cpp
 )
 
-set(THIRDPART_INC_PATH "")
-set(THIRDPART_SRC_FILES "")
+list(APPEND THIRDPART_INC_PATH FILES "")
 
 #being third-party
 
 #being lua socket
-set(LUA_SOCKET_INC_PATH ${EXT_SRC_ROOT}/luasocket)
 set(LUA_SOCKET_SRC_PATH ${EXT_SRC_ROOT}/luasocket)
 set (LUA_SOCKET_SRC_FILES
     ${LUA_SOCKET_SRC_PATH}/auxiliar.cpp
@@ -96,10 +94,29 @@ set (LUA_SOCKET_SRC_FILES
     ${LUA_SOCKET_SRC_PATH}/wsocket.cpp
     ${LUA_SOCKET_SRC_PATH}/wsocket.h
 )
+
+list(APPEND THIRDPART_SRC_FILES ${LUA_SOCKET_SRC_FILES})
 #end lua socket
 
-set(THIRDPART_INC_PATH ${THIRDPART_INC_PATH} ${LUA_SOCKET_INC_PATH})
-set(THIRDPART_SRC_FILES ${THIRDPART_SRC_FILES} ${LUA_SOCKET_SRC_FILES})
+#begin lua protobuf
+set(LUA_PROTOBUF_SRC_FILES
+    ${EXT_SRC_ROOT}/lua-protobuf/pb.cpp
+)
+
+list(APPEND THIRDPART_SRC_FILES ${LUA_PROTOBUF_SRC_FILES})
+#end lua protobuf
+
+#begin lua rapidjson
+set(LUA_RAPIDJSON_INC_PATH ${EXT_SRC_ROOT}/lua-rapidjson/include)
+set(LUA_RAPIDJSON_SRC_FILES
+    ${EXT_SRC_ROOT}/lua-rapidjson/source/i64lib.cpp
+    ${EXT_SRC_ROOT}/lua-rapidjson/source/rapidjson.cpp
+)
+
+list(APPEND THIRDPART_INC_PATH ${LUA_RAPIDJSON_INC_PATH})
+list(APPEND THIRDPART_SRC_FILES ${LUA_RAPIDJSON_SRC_FILES})
+#end lua rapidjson
+
 #end third-party
 
 include_directories(
@@ -107,7 +124,7 @@ include_directories(
     ${THIRDPART_INC_PATH}
 )
 
-# add_definitions("-DLUA_USE_C89")
+add_definitions("-DLUA_32BITS_STRING")
 
 if(APPLE)
     if(IOS)
